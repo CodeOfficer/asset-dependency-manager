@@ -1,15 +1,13 @@
-# AssetManager
-# you prefer to have your js plugins as seperate files
-# your js and css files all have corresponding extensions
-
-# Notes
-
-# hash of ...
-# symbol to string
-# symbol to array of string
-# symbol to hash of array or string
-# symbol to symbol (recursive)
-# ... must include suffix, ALWAYS
+# expects to find a method called 'asset_dependencies' in your app helper file
+# that returns a hash of :keys representing your :js dependencies
+# 
+#   {
+#     :one_script =>  'one_script.js',  
+#     :tabs =>        ['tabs.js', 'tabs.css'],
+#     :slider =>      { :js => ['slider/slider_one.js', 'slider/slider_two.js'], :css => 'slider/slider.css' },
+#     :testing =>     'whatever.js',
+#     :whatever =>    :one_script
+#   }
 
 module CodeOfficer 
   module AssetManager
@@ -25,13 +23,12 @@ module CodeOfficer
       def add_asset_requirement(*syms)
         syms.each do |sym|
           match = asset_dependency_for(sym)
-          logger.fatal { " |||||| #{match.class}" }
           case match
             when Array
               match.each { |x| add_asset_requirement_by_type(x) }
             when Hash
-              match[:js].each { |x| add_asset_requirement_by_type(x) }
-              match[:css].each { |x| add_asset_requirement_by_type(x) }
+              match[:js].each { |x| add_asset_requirement_by_type(x) } unless match[:js].blank? 
+              match[:css].each { |x| add_asset_requirement_by_type(x) } unless match[:css].blank?
             when String
               add_asset_requirement_by_type(match)
             when Symbol
@@ -39,10 +36,11 @@ module CodeOfficer
           end
         end
       end
-      alias_method :asset, :add_asset_requirement
+      alias_method :assets_for, :add_asset_requirement
       
       def asset_dependency_for(sym)
         # TODO: add memoization later?
+        # TODO: provide integration with rails own defaults
         other_dependencies = respond_to?(:asset_dependencies) ? asset_dependencies : {}
         {
           :defaults => true
@@ -63,11 +61,9 @@ module CodeOfficer
     module View
       # FIXME: helpers to output the controllers hash keys for js and css
       def asset_manager_tags
-        logger.fatal { "JAVASCRIPTS! #{@required_javascripts.inspect}" }
-        logger.fatal { "STYLESHEETS! #{@required_stylesheets.inspect}" }
         js = (@required_javascripts || []).collect { |js| javascript_include_tag("#{js}") }.join("\n")
         css = (@required_stylesheets || []).collect { |css| stylesheet_link_tag("#{css}") }.join("\n")
-        content_tag :pre, h(js +"\n"+ css)
+        js +"\n"+ css
       end
     end
 

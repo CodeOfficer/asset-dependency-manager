@@ -1,7 +1,9 @@
 AssetManager
 ============
 
-Introduction goes here.
+assumptions:
+you prefer to keep your js plugins as seperate files
+your js and css files all have corresponding ".xxx" extensions
 
 
 Example

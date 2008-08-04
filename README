@@ -16,7 +16,8 @@ though that would be 350k of scripts you might or might not use.
 assumptions:
 you prefer to keep your js plugins as seperate files
 your js and css files all have corresponding ".xxx" extensions
-
+you keep your *.js files in you javascripts directory
+you keep your *.css files in your stylesheets directory
 
 Example
 =======

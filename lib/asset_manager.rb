@@ -38,6 +38,8 @@ module CodeOfficer
       end
       alias_method :assets_for, :add_asset_requirement
       
+      private
+      
       def asset_dependency_for(sym)
         # TODO: add memoization later?
         # TODO: provide integration with rails own defaults
@@ -46,8 +48,6 @@ module CodeOfficer
           :defaults => true
         }.merge(other_dependencies)[sym.to_sym] # || []
       end
-      
-      private
       
       def add_asset_requirement_by_type(asset)
         if asset.downcase =~ /js$/ then

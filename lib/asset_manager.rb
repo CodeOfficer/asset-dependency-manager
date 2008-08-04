@@ -1,5 +1,5 @@
 # expects to find a method called 'asset_dependencies' in your app helper file
-# that returns a hash of :keys representing your :js and:css dependencies
+# that returns a hash of :keys representing your :js and :css dependencies
 # 
 #   {
 #     :one_script =>  'one_script.js',  

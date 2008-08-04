@@ -61,8 +61,8 @@ module CodeOfficer
     module View
       # FIXME: helpers to output the controllers hash keys for js and css
       def asset_manager_tags
-        js = (@required_javascripts || []).collect { |js| javascript_include_tag("#{js}") }.join("\n")
-        css = (@required_stylesheets || []).collect { |css| stylesheet_link_tag("#{css}") }.join("\n")
+        js = (@required_javascripts || []).sort.collect { |js| javascript_include_tag("#{js}") }.join("\n")
+        css = (@required_stylesheets || []).sort.collect { |css| stylesheet_link_tag("#{css}") }.join("\n")
         js +"\n"+ css
       end
     end

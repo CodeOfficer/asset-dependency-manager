@@ -45,7 +45,7 @@ which they are needed.
 
 In your Views / Partials ...
 
-You'll now a view helper called assets_for to declare which assets need to be loaded to support 
+You'll now use a view helper called assets_for to declare which assets need to be loaded to support 
 the current view or partial.
 
     <% assets_for :tabs, :slider, :whatever %>

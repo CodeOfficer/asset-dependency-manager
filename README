@@ -4,6 +4,9 @@ Asset Dependency Manager Readme
 * Email:      spam*@*codeofficer*dot*com
 * JQuery:     http://www.jquery.com/
 * JQuery UI:  http://ui.jquery.com/
+* Based on    http://github.com/arya/js_dependency_manager/tree/master
+
+(Credit goes to Arya for initial inspiration with his JS dependency manager)
 
 ADM is a plugin to dynamically manage a complex array of xxx.js and xxx.css dependencies. 
 It will assist you in defining those dependencies and outputting the appropriate javascript_include

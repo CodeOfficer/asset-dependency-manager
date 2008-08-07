@@ -45,6 +45,7 @@ module CodeOfficer
         # memoizing @required_asset_dependencies
         unless @required_asset_dependencies.is_a? Hash
           @required_asset_dependencies = respond_to?(:asset_dependencies) ? asset_dependencies : {}
+          raise 'helper method asset_dependencies must return a Hash' unless @required_asset_dependencies.is_a? Hash
           if @required_asset_dependencies.has_key? :defaults
             if @required_asset_dependencies[:defaults].eql? true
               rails_defaults = ActionView::Helpers::AssetTagHelper::JAVASCRIPT_DEFAULT_SOURCES.collect! {|x| (x=~/js$/i) ? x : "#{x}.js" }

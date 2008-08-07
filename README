@@ -27,10 +27,10 @@ Example
 
 In your Application Helper ...
 
-Here you define a method declaring your asset dependencies. This method, which should return a Hash, 
-matches keys to values, which can be of type String, Array or Symbol. Thus you create a 
-dictionary of keys representing files you might conditionally include later on in the views for 
-which they are needed. Values of Array can be composed of Symbols and Strings. 
+Here you must define a method called 'asset_dependencies'. This method, which should return a Hash, 
+matches keys to values, the values for which can be of type String, Array or Symbol. While Array values can be 
+composed of both Symbols and Strings, the Symbols should appear first so that the dependencies they refer to
+can be loaded first. 
 
 There is also a special key of :defaults which if set to true will make a dependency for rails 
 own JAVASCRIPT_DEFAULT_SOURCES.
@@ -65,9 +65,9 @@ In your Layout file ...
 
 And that will return ...
 
-<script src="/javascripts/application.js?1217637539" type="text/javascript"></script>
 <script src="/javascripts/jquery-1.2.6.min.js?1218093045" type="text/javascript"></script>
 <script src="/javascripts/ui/ui.core.js?1215626244" type="text/javascript"></script>
+<script src="/javascripts/application.js?1217637539" type="text/javascript"></script>
 <script src="/javascripts/ui/ui.slider.js?1215624926" type="text/javascript"></script>
 <script src="/javascripts/ui/ui.tabs.js?1215624926" type="text/javascript"></script>
 <link href="/stylesheets/themes/flora/flora.slider.css?1215624926" media="screen" rel="stylesheet" type="text/css" />

@@ -1,18 +1,3 @@
-# expects to find a method called 'asset_dependencies' in your app helper file
-# that returns a hash of :keys representing your :js and :css dependencies
-# :keys can point to an Array or String
-# 
-# {
-# :defaults =>        true,
-# :core =>            'ui/ui.core.js',
-# :tabs =>            [ :core, 
-#                       'ui/ui.tabs.js', 
-#                       'themes/flora/flora.tabs.css' ],
-# :slider =>          [ :core,
-#                       'ui/ui.slider.js', 
-#                       'themes/flora/flora.slider.css' ],
-# :slider_and_tabs => [ :tabs, :slider ]
-# }
 
 module CodeOfficer 
   module AssetManager
@@ -28,10 +13,10 @@ module CodeOfficer
       def add_asset_requirement(*args)
         args.each do |arg|
           case arg
+            when Symbol
+              add_asset_requirement(asset_dependency_for(arg))
             when Array
               arg.each { |x| add_asset_requirement(x) unless x.blank? }
-            when Symbol
-              add_asset_requirement(asset_dependency_for(arg)) 
             when String
               add_asset_requirement_by_type(arg)
           end
@@ -47,8 +32,7 @@ module CodeOfficer
           raise 'helper method asset_dependencies must return a Hash' unless @required_asset_dependencies.is_a? Hash
           if @required_asset_dependencies.has_key? :defaults
             if @required_asset_dependencies[:defaults].eql? true
-              rails_defaults = ActionView::Helpers::AssetTagHelper::JAVASCRIPT_DEFAULT_SOURCES
-              rails_defaults.collect! {|x| (x=~/js$/i) ? x : "#{x}.js" }
+              rails_defaults = ActionView::Helpers::AssetTagHelper::JAVASCRIPT_DEFAULT_SOURCES.collect! {|x| (x=~/js$/i) ? x : "#{x}.js" }
               @required_asset_dependencies.merge!({ :defaults => rails_defaults })
               assets_for :defaults unless asset_dependency_for(:defaults).blank?
             else 

@@ -70,7 +70,6 @@ module CodeOfficer
     end
     
     module View
-      # FIXME: helpers to output the controllers hash keys for js and css
       def asset_dependency_manager_tags
         assets_for :defaults unless asset_dependency_for(:defaults).blank?
         js = (@required_javascripts || []).sort.collect { |js| javascript_include_tag("#{js}") }.join("\n")

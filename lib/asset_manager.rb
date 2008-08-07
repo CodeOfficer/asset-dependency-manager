@@ -41,7 +41,7 @@ module CodeOfficer
       private
       
       def asset_dependency_for(sym)
-        unless @required_asset_dependencies
+        unless @required_asset_dependencies.is_a? Hash
           @required_asset_dependencies = respond_to?(:asset_dependencies) ? asset_dependencies : {}
           if @required_asset_dependencies.has_key? :defaults
             rails_defaults = ActionView::Helpers::AssetTagHelper::JAVASCRIPT_DEFAULT_SOURCES.collect {|x| x + ".js"}

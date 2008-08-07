@@ -33,7 +33,7 @@ composed of both Symbols and Strings, the Symbols should appear first so that th
 can be loaded first. 
 
 There is also a special key of :defaults which if set to true will make a dependency for rails 
-own JAVASCRIPT_DEFAULT_SOURCES.
+own JAVASCRIPT_DEFAULT_SOURCES which will be loaded first.
 
     module ApplicationHelper
       def asset_dependencies

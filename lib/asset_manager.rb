@@ -45,7 +45,7 @@ module CodeOfficer
           @required_asset_dependencies = respond_to?(:asset_dependencies) ? asset_dependencies : {}
           if @required_asset_dependencies.has_key? :defaults
             rails_defaults = ActionView::Helpers::AssetTagHelper::JAVASCRIPT_DEFAULT_SOURCES
-            rails_defaults.collect {|x| (x=~/js$/i) ? x : "#{x}.js" }
+            rails_defaults.collect! {|x| (x=~/js$/i) ? x : "#{x}.js" }
             @required_asset_dependencies.merge!({:defaults => rails_defaults})
           end
         end

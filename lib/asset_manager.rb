@@ -32,7 +32,8 @@ module CodeOfficer
           raise 'helper method asset_dependencies must return a Hash' unless @required_asset_dependencies.is_a? Hash
           if @required_asset_dependencies.has_key? :defaults
             if @required_asset_dependencies[:defaults].eql? true
-              rails_defaults = ActionView::Helpers::AssetTagHelper::JAVASCRIPT_DEFAULT_SOURCES.collect! {|x| (x=~/js$/i) ? x : "#{x}.js" }
+              rails_defaults = ActionView::Helpers::AssetTagHelper::JAVASCRIPT_DEFAULT_SOURCES
+              rails_defaults.collect! {|x| (x=~/js$/i) ? x : "#{x}.js" }
               @required_asset_dependencies.merge!({ :defaults => rails_defaults })
               assets_for :defaults unless asset_dependency_for(:defaults).blank?
             else 

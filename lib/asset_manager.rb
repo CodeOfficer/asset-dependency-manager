@@ -3,14 +3,15 @@
 # :keys can point to an Array or String
 # 
 # {
-# :defaults =>      'application.js',
-# :core_scripts =>  [ 'one_script.js', 'two_script.js', :defaults, 'one_style.css' ],
-# :tabs =>          [ :core_scripts, 'tabs.js', 'tabs.css' ],
-# :slider =>        [ 'slider/slider_one.js', 
-#                     'slider/slider_two.js',
-#                     'slider/slider.css' ],
-# :testing =>       'whatever.js',
-# :whatever =>      [ :defaults, :tabs ]
+# :defaults =>        true,
+# :core =>            'ui/ui.core.js',
+# :tabs =>            [ :core, 
+#                       'ui/ui.tabs.js', 
+#                       'themes/flora/flora.tabs.css' ],
+# :slider =>          [ :core,
+#                       'ui/ui.slider.js', 
+#                       'themes/flora/flora.slider.css' ],
+# :slider_and_tabs => [ :tabs, :slider ]
 # }
 
 module CodeOfficer 
@@ -41,12 +42,16 @@ module CodeOfficer
       private
       
       def asset_dependency_for(sym)
+        # memoizing @required_asset_dependencies
         unless @required_asset_dependencies.is_a? Hash
           @required_asset_dependencies = respond_to?(:asset_dependencies) ? asset_dependencies : {}
           if @required_asset_dependencies.has_key? :defaults
-            rails_defaults = ActionView::Helpers::AssetTagHelper::JAVASCRIPT_DEFAULT_SOURCES
-            rails_defaults.collect! {|x| (x=~/js$/i) ? x : "#{x}.js" }
-            @required_asset_dependencies.merge!({:defaults => rails_defaults})
+            if @required_asset_dependencies[:defaults].eql? true
+              rails_defaults = ActionView::Helpers::AssetTagHelper::JAVASCRIPT_DEFAULT_SOURCES.collect! {|x| (x=~/js$/i) ? x : "#{x}.js" }
+              @required_asset_dependencies.merge!({ :defaults => rails_defaults })
+            else 
+              @required_asset_dependencies.delete :defaults
+            end            
           end
         end
         @required_asset_dependencies[sym.to_sym]
@@ -65,6 +70,7 @@ module CodeOfficer
     module View
       # FIXME: helpers to output the controllers hash keys for js and css
       def asset_dependency_manager_tags
+        assets_for :defaults unless asset_dependency_for(:defaults).blank?
         js = (@required_javascripts || []).sort.collect { |js| javascript_include_tag("#{js}") }.join("\n")
         css = (@required_stylesheets || []).sort.collect { |css| stylesheet_link_tag("#{css}") }.join("\n")
         js +"\n"+ css

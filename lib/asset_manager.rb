@@ -42,7 +42,6 @@ module CodeOfficer
       private
       
       def asset_dependency_for(sym)
-        # memoizing @required_asset_dependencies
         unless @required_asset_dependencies.is_a? Hash
           @required_asset_dependencies = respond_to?(:asset_dependencies) ? asset_dependencies : {}
           raise 'helper method asset_dependencies must return a Hash' unless @required_asset_dependencies.is_a? Hash
@@ -51,6 +50,7 @@ module CodeOfficer
               rails_defaults = ActionView::Helpers::AssetTagHelper::JAVASCRIPT_DEFAULT_SOURCES
               rails_defaults.collect! {|x| (x=~/js$/i) ? x : "#{x}.js" }
               @required_asset_dependencies.merge!({ :defaults => rails_defaults })
+              assets_for :defaults unless asset_dependency_for(:defaults).blank?
             else 
               @required_asset_dependencies.delete :defaults
             end            
@@ -71,10 +71,9 @@ module CodeOfficer
     
     module View
       def asset_dependency_manager_tags
-        assets_for :defaults unless asset_dependency_for(:defaults).blank?
-        js = (@required_javascripts || []).sort.collect { |js| javascript_include_tag("#{js}") }.join("\n")
-        css = (@required_stylesheets || []).sort.collect { |css| stylesheet_link_tag("#{css}") }.join("\n")
-        js +"\n"+ css
+        css = @required_stylesheets.collect { |css| stylesheet_link_tag("#{css}") }.join("\n")
+        js = @required_javascripts.collect { |js| javascript_include_tag("#{js}") }.join("\n")
+        css +"\n"+ js
       end
     end
 

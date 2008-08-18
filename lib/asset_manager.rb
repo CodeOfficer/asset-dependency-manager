@@ -56,7 +56,7 @@ module CodeOfficer
     
     module View
       def asset_dependency_manager_tags
-        @required_stylesheets.push(@required_stylesheets.delete('application.js')) if @required_stylesheets.include?('application.js')
+        @required_stylesheets.push(@required_stylesheets.delete('application.css')) if @required_stylesheets.include?('application.css')
         css = @required_stylesheets.collect { |css| stylesheet_link_tag("#{css}") }.join("\n")
         @required_javascripts.push(@required_javascripts.delete('application.js')) if @required_javascripts.include?('application.js')
         js = @required_javascripts.collect { |js| javascript_include_tag("#{js}") }.join("\n")
